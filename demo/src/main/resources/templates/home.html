@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+ 	<!-- thymeleaf를 쓰겟다고하는 코드 -->
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	Hello World!!
+	<a href="/test">테스트</a>
+	<h2 th:text="${age}">나이</h2> 
+	<!-- 상단에 <html xmlns:th="http://www.thymeleaf.org"> 코드가 
+	있는곳에서만 사용가능 -->
+	<a th:href="@{/member}">회원목록</a>
+	<a th:href="@{/bye}">인사</a>
+</body>
+</html>
