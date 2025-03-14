@@ -3,7 +3,7 @@
 xmlns:layout="<http://www.ultraq.net.nz/thymeleaf/layout>" 
 layout:decorate="~{/include/layout}">
 	<th:block layout:fragment="content">	
-		<link th:href="@{/css/static/member/create.css}" rel="stylesheet">
+		<link th:href="@{/css/member/create.css}" rel="stylesheet">
 		<section>
 			<div id="section_wrap">
 				<div class="word">
@@ -33,33 +33,44 @@ layout:decorate="~{/include/layout}">
 				let vali_check = false;
 				let vali_text = "";
 				
-				if(!form.member_id){
+				if(!form.member_id.value){
 					vali_text += "아이디를 입력하세요.";
-				}else if(!form.member_pw){
+					form.member_id.focus();
+				}else if(!form.member_pw.value){
 					vali_text += "비밀번호를 입력하세요.";
-				}else if(!form.member_pw_check){
+					form.member_pw.focus();
+				}else if(!form.member_pw_check.value){
 					vali_text += "비밀번호 확인을 입력하세요.";
-				}else if(!form.member_name){
+					form.member_pw_check.focus();
+				}else if(form.member_pw_check.value != form.member_pw.value){
+					vali_text += "비밀번호가 일치하지 않습니다.";
+					form.member_pw_check.focus();
+				}else if(!form.member_name.value){
 					vali_text += "닉네임을 입력하세요.";
+					form.member_name.focus();
 				}else{
-					vale_check = true;
+					vali_check = true;
 				}
 				
-				if(vali_check == false){
-					alerty(valu_text);
-				}else{
+				// 회원정보 등록
+				if(vali_check == true){
 					const payload = new FormData(form);
 					fetch("/member",{
-						method:'get',
+						method:'post',
 						body:payload
 					})
 					.then(response => response.json())
 					.then(data =>{
-						alert("회원가입이 완료되었습니다.");
+						alert(data.res_msg);
 					})
 					.catch(error => {
-						alert("회원가입 중 오류가 발생했습니다.");
+						alert(data.res_msg);
+						if(date.res_code == '200'){
+							location.href="/";
+						}
 					})
+				}else{
+					alert(vali_text);
 				}
 				
 				
