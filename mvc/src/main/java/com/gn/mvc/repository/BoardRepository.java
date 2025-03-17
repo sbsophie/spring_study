@@ -2,6 +2,8 @@ package com.gn.mvc.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -14,7 +16,7 @@ public interface BoardRepository extends JpaRepository<Board,Long>,JpaSpecificat
 	// <관리할 엔티티명,PK의 자료형> 적어주면됨
 	
 	//3. Specification 사용
-	List<Board> findAll(Specification<Board> spec);
+	Page<Board> findAll(Specification<Board> spec, Pageable pageable);
 	
 	// 1. 메소드 네이밍을 이용한 방법
 	List<Board> findByBoardTitleContaining(String keyword);
