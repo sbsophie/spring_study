@@ -79,6 +79,8 @@ public class BoardController {
 	//목록조회 코드
 	@GetMapping("/board/{id}")
 	public String selectBoardOne(@PathVariable("id") Long id,Model model) {
+		//(@PathVariable("id") Long id,Model model)여기엔 프론트쪽데이터를 받아온것
+		//public String 의 String은 화면쪽으로 보내주는거 
 		logger.info("게시글 단일 조회 : "+id);
 		Board result = service.selectBoardOne(id);
 		model.addAttribute("board",result);
@@ -97,6 +99,7 @@ public class BoardController {
 	@PostMapping("/board/{id}/update")
 	@ResponseBody
 	public Map<String,String> updateBoardApi(BoardDto param){
+		// Map<String,String>은 JSON데이터를 보내줄때(responce) 사용
 		Map<String,String> resultMap = new HashMap<String,String>();
 		resultMap.put("res_code", "500");
 		resultMap.put("res_msg", "게시글 수정중 오류가 발생하였습니다.");

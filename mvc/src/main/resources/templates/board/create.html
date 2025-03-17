@@ -30,7 +30,7 @@ layout:decorate="~{/include/layout}">
 				
 				if(!form.board_title.value){
 					vali_text += "제목을 입력하세요";
-					form.board_title.focus();
+					form.board_title.focus(); //커서를 띄우겠다는 의미
 				}else if(!form.board_content.value){
 					vali_text += "내용을 입력하세요.";
 					form.board_content.focus();
