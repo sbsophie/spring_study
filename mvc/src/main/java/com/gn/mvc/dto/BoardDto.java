@@ -35,7 +35,7 @@ public class BoardDto {
 	// 1. BoardDto를 Board라는 엔티티로 바꾸기
 	public Board toEntity() {
 		return Board.builder()
-				.boardTitle(board_title)
+				.boardTitle(board_title) //왼쪽:엔티티의 필드명 , 오른쪽:BoardDto의 필드명
 				.boardContent(board_content)
 				.boardNo(board_no)
 				.member(Member.builder().memberNo(board_writer).build())

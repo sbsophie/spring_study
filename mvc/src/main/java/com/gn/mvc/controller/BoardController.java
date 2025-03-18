@@ -29,7 +29,7 @@ import com.gn.mvc.service.BoardService;
 import lombok.RequiredArgsConstructor;
 
 @Controller
-@RequiredArgsConstructor
+@RequiredArgsConstructor // final예약어가 붙어있는 친구만 매개변수 생성자를 만들어주는 아이
 public class BoardController {
 	
 	// 로그백을 써서 기록을 남기겠다는 의미의 코드
@@ -38,13 +38,15 @@ public class BoardController {
 	//3. 생성자 주입방법 + final
 	private final BoardService service;
 	private final AttachService attachService;
-	
+
+	// 게시글 등록(화면전환 Controller생성)
 	// nav.html에 적어준 url이 여기로 들어오느거여서 GetMapping에 맞춰줘야함
 	@GetMapping("/board/create")  //하나쓸때는 {}안써도됨
 	public String createBoardView() {
 		return "board/create";
 	}
 	
+	//
 	@PostMapping("/board")
 	@ResponseBody
 	public Map<String,String> createBoardApi(BoardDto dto) {

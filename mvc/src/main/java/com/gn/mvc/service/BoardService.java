@@ -28,7 +28,6 @@ import lombok.RequiredArgsConstructor;
 public class BoardService {
 
     private final MemberRepository memberRepository;
-
 	private final BoardRepository repository;
 	private final AttachRepository attachRepository;
 
@@ -128,14 +127,10 @@ public class BoardService {
 			e.printStackTrace();
 		}
 		return result;
-//		// 1. 매개변수dto를 entity로 변경해줘야함
-//		Board param = dto.toEntity();
-//		
-//		// 2. Repository의 save()매소드를 호출해야함
-//		Board result = repository.save(param);
-//		
-//		// 3. 엔티티를 dto로 바꿔주기
-//		return new BoardDto().toDto(result);
+		
+//		Board param = dto.toEntity();	 1. 매개변수dto를 entity로 변경해줘야함
+//		Board result = repository.save(param);	 2. Repository의 save()매소드를 호출해야함
+//		return new BoardDto().toDto(result);	 3. 엔티티를 dto로 바꿔주기
 		
 	}
 

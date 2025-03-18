@@ -30,11 +30,6 @@ layout:decorate="~{/include/layout}">
 		<script>
 			// 게시글 수정안 파일버튼
 			const changeStatus = function(element){
-				// 1. 만약에 btn_close라는 클래스를 가지고 있는경우
-				// -> disabled를 꺼주기(false)
-				// -> 버튼 글자 : 유지
-				// -> 클래스 : btn_open으로 바뀜
-				// -> 파일명에 line-through가 표시되야함
 				
 				const bumo = element.parentElement;
 				const child1 = bumo.firstElementChild; //input타입 hidden을 이야기하는거임
@@ -53,13 +48,16 @@ layout:decorate="~{/include/layout}">
 					child1.disabled = true;
 					child2.style.textDecoration = 'none';
 				}
+				// 1. 만약에 btn_close라는 클래스를 가지고 있는경우
+				// -> disabled를 꺼주기(false)
+				// -> 버튼 글자 : 유지
+				// -> 클래스 : btn_open으로 바뀜
+				// -> 파일명에 line-through가 표시되야함
 				// 2. btn_open이라는 클래스를 가지고 있는 경우
 				// -> disabled를 켜주기(true)
-			
-			
 			}
 		
-		
+			// 유효성 검사
 			const form = document.update_board_form;
 			form.addEventListener('submit',function(e){
 				e.preventDefault();
