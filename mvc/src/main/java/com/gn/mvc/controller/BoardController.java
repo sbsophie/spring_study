@@ -1,6 +1,8 @@
 package com.gn.mvc.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -13,11 +15,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.gn.mvc.dto.AttachDto;
 import com.gn.mvc.dto.BoardDto;
 import com.gn.mvc.dto.PageDto;
 import com.gn.mvc.dto.SearchDto;
+import com.gn.mvc.entity.Attach;
 import com.gn.mvc.entity.Board;
+import com.gn.mvc.service.AttachService;
 import com.gn.mvc.service.BoardService;
 
 import lombok.RequiredArgsConstructor;
@@ -31,6 +37,7 @@ public class BoardController {
 
 	//3. 생성자 주입방법 + final
 	private final BoardService service;
+	private final AttachService attachService;
 	
 	// nav.html에 적어준 url이 여기로 들어오느거여서 GetMapping에 맞춰줘야함
 	@GetMapping("/board/create")  //하나쓸때는 {}안써도됨
@@ -45,16 +52,30 @@ public class BoardController {
 		resultMap.put("res_code", "500");
 		resultMap.put("res_msg", "게시글 등록중 오류가 발생하였습니다.");
 		
-		// Service가 가지고 있는 createBoard메소드를 호출해야함
-		BoardDto result = service.createBoard(dto);
+		List<AttachDto> attachDtoList = new ArrayList<AttachDto>();
 		
-		logger.debug("1 : "+result.toString());
-		logger.info("2 : "+result.toString());
-		logger.warn("3 : "+result.toString());
-		logger.error("4 : "+result.toString());
-		
+		for(MultipartFile mf : dto.getFiles()) {
+			//여기서 파일 save하는 방향으로 코드 짜주기
+			AttachDto attachDto = attachService.uploadFile(mf);
+			if(attachDto != null) attachDtoList.add(attachDto);
+		}
+		if(dto.getFiles().size() == attachDtoList.size()) {
+			int result = service.createBoard(dto,attachDtoList);
+			if(result > 0 ) {
+				resultMap.put("res_code", "200");
+				resultMap.put("res_msg", "게시글이 등록되었습니다.");
+			}
+		}
 		
 		return resultMap;
+		
+//		Service가 가지고 있는 createBoard메소드를 호출해야함
+//		BoardDto result = service.createBoard(dto);
+//		
+//		logger.debug("1 : "+result.toString());
+//		logger.info("2 : "+result.toString());
+//		logger.warn("3 : "+result.toString());
+//		logger.error("4 : "+result.toString());
 	}
 	@GetMapping("/board")
 	public String selectBoardAll(Model model,SearchDto searchDto,
@@ -84,6 +105,9 @@ public class BoardController {
 		logger.info("게시글 단일 조회 : "+id);
 		Board result = service.selectBoardOne(id);
 		model.addAttribute("board",result);
+		
+		List<Attach> attachList = attachService.selectAttachList(id);
+		model.addAttribute("attachList",attachList);
 		return "board/detail";
 	}
 	
@@ -92,6 +116,9 @@ public class BoardController {
 	public String updateBoardView(@PathVariable("id") Long id,Model model) {
 		Board board = service.selectBoardOne(id);
 		model.addAttribute("board",board);
+		
+		List<Attach> attachList = attachService.selectAttachList(id);
+		model.addAttribute("attachList",attachList);
 		return "board/update";
 	}
 	
@@ -103,15 +130,18 @@ public class BoardController {
 		Map<String,String> resultMap = new HashMap<String,String>();
 		resultMap.put("res_code", "500");
 		resultMap.put("res_msg", "게시글 수정중 오류가 발생하였습니다.");
+		
+		logger.info("삭제 파일 정보"+param.getDelete_files());
+		
 		//1.BoardDto가 출력되는지 확인
 		logger.debug(param.toString());
 		//2.BoardService와 BoardRepository를 거쳐서 게시글 수정
-		Board result = service.updateBoard(param);
-		//3.수정 결과를 Entity가 null이 아니면 성공 그외에는 실패
-		if(result != null) {
-			resultMap.put("res_code", "200");
-			resultMap.put("res_msg", "게시글이 수정되었습니다.");
-		}
+//		Board result = service.updateBoard(param);
+//		//3.수정 결과를 Entity가 null이 아니면 성공 그외에는 실패
+//		if(result != null) {
+//			resultMap.put("res_code", "200");
+//			resultMap.put("res_msg", "게시글이 수정되었습니다.");
+//		}
 		return resultMap;
 	}
 	

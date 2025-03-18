@@ -1,17 +1,24 @@
 package com.gn.mvc.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.gn.mvc.dto.AttachDto;
 import com.gn.mvc.dto.BoardDto;
 import com.gn.mvc.dto.PageDto;
 import com.gn.mvc.dto.SearchDto;
+import com.gn.mvc.entity.Attach;
 import com.gn.mvc.entity.Board;
+import com.gn.mvc.repository.AttachRepository;
 import com.gn.mvc.repository.BoardRepository;
+import com.gn.mvc.repository.MemberRepository;
 import com.gn.mvc.specification.BoardSpecification;
 
 import lombok.RequiredArgsConstructor;
@@ -20,7 +27,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BoardService {
 
+    private final MemberRepository memberRepository;
+
 	private final BoardRepository repository;
+	private final AttachRepository attachRepository;
 
 	//삭제
 	public int deleteBoard(Long id) {
@@ -93,19 +103,40 @@ public class BoardService {
 		}
 		Page<Board> list = repository.findAll(spec,pageable);
 		return list;
-		
-		
 	}
-	//
-	public BoardDto createBoard(BoardDto dto) {
-		// 1. 매개변수dto를 entity로 변경해줘야함
-		Board param = dto.toEntity();
+	
+	// 파일
+	@Transactional(rollbackFor = Exception.class)
+	public int createBoard(BoardDto dto,List<AttachDto> attachList) {
+		int result = 0;
+		try {
+			// 1. Board 엔티티를 insert해주기
+			Board entity = dto.toEntity();
+			Board saved = repository.save(entity);
+			// 2. insert 결과로 반환받은 PK
+			Long boardNo = saved.getBoardNo();
+			// 3. 만약에 attachList에 데이터가 있는경우 Attach엔티티도 insert해줘야함
+			if(attachList.size() != 0) {
+				for(AttachDto attachDto : attachList) {
+					attachDto.setBoard_no(boardNo);
+					Attach attach = attachDto.toEntity();
+					attachRepository.save(attach);
+				}
+			}
+			result = 1;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+//		// 1. 매개변수dto를 entity로 변경해줘야함
+//		Board param = dto.toEntity();
+//		
+//		// 2. Repository의 save()매소드를 호출해야함
+//		Board result = repository.save(param);
+//		
+//		// 3. 엔티티를 dto로 바꿔주기
+//		return new BoardDto().toDto(result);
 		
-		// 2. Repository의 save()매소드를 호출해야함
-		Board result = repository.save(param);
-		
-		// 3. 엔티티를 dto로 바꿔주기
-		return new BoardDto().toDto(result);
 	}
 
 
