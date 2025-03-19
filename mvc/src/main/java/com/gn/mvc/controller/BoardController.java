@@ -97,7 +97,7 @@ public class BoardController {
 		return "board/list";
 	}
 	
-	//목록조회 코드
+	//상제정보 조회 코드
 	@GetMapping("/board/{id}")
 	public String selectBoardOne(@PathVariable("id") Long id,Model model) {
 		//(@PathVariable("id") Long id,Model model)여기엔 프론트쪽데이터를 받아온것
