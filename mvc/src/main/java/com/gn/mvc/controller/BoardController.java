@@ -46,7 +46,7 @@ public class BoardController {
 		return "board/create";
 	}
 	
-	//
+	//게시글 등록시 동작하는 기능
 	@PostMapping("/board")
 	@ResponseBody
 	public Map<String,String> createBoardApi(BoardDto dto) {
@@ -61,14 +61,11 @@ public class BoardController {
 			AttachDto attachDto = attachService.uploadFile(mf);
 			if(attachDto != null) attachDtoList.add(attachDto);
 		}
-		if(dto.getFiles().size() == attachDtoList.size()) {
-			int result = service.createBoard(dto,attachDtoList);
-			if(result > 0 ) {
-				resultMap.put("res_code", "200");
-				resultMap.put("res_msg", "게시글이 등록되었습니다.");
-			}
+		int result = service.createBoard(dto,attachDtoList);
+		if(result > 0 ) {
+			resultMap.put("res_code", "200");
+			resultMap.put("res_msg", "게시글이 등록되었습니다.");
 		}
-		
 		return resultMap;
 		
 //		Service가 가지고 있는 createBoard메소드를 호출해야함
@@ -79,6 +76,7 @@ public class BoardController {
 //		logger.warn("3 : "+result.toString());
 //		logger.error("4 : "+result.toString());
 	}
+	
 	@GetMapping("/board")
 	public String selectBoardAll(Model model,SearchDto searchDto,
 			PageDto pageDto) {
@@ -97,8 +95,8 @@ public class BoardController {
 		// 3. list.html에 데이터 셋팅
 		// 위 3가지를 셋팅해야 목록화면 나옴
 		return "board/list";
-		
 	}
+	
 	//목록조회 코드
 	@GetMapping("/board/{id}")
 	public String selectBoardOne(@PathVariable("id") Long id,Model model) {
@@ -133,17 +131,24 @@ public class BoardController {
 		resultMap.put("res_code", "500");
 		resultMap.put("res_msg", "게시글 수정중 오류가 발생하였습니다.");
 		
-		logger.info("삭제 파일 정보"+param.getDelete_files());
+		//logger.info("삭제 파일 정보"+param.getDelete_files());
 		
 		//1.BoardDto가 출력되는지 확인
 		logger.debug(param.toString());
-		//2.BoardService와 BoardRepository를 거쳐서 게시글 수정
-//		Board result = service.updateBoard(param);
-//		//3.수정 결과를 Entity가 null이 아니면 성공 그외에는 실패
-//		if(result != null) {
-//			resultMap.put("res_code", "200");
-//			resultMap.put("res_msg", "게시글이 수정되었습니다.");
-//		}
+		//2.BoardService와 BoardRepository를 거쳐서 게시글 수정 -> 이부분에만 파일 삭제
+		List<AttachDto> attachDtoList = new ArrayList<AttachDto>();
+		
+		Board saved = service.updateBoard(param, attachDtoList);
+		//3.수정 결과를 Entity가 null이 아니면 성공 그외에는 실패
+		if(saved != null) {
+			resultMap.put("res_code", "200");
+			resultMap.put("res_msg", "게시글이 수정되었습니다.");
+		}
+		
+		for(MultipartFile mf : param.getFiles()) {
+			AttachDto attachDto = attachService.uploadFile(mf);
+			if(attachDto != null) attachDtoList.add(attachDto);
+		}
 		return resultMap;
 	}
 	

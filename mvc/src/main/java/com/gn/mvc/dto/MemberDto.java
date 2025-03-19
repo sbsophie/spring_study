@@ -29,8 +29,8 @@ public class MemberDto {
 		return Member.builder()
 				.memberNo(member_no)
 				.memberId(member_id)
-				.memberPw(member_id)
-				.memberName(member_id)
+				.memberPw(member_pw)
+				.memberName(member_name)
 				.build();
 	}
 	public MemberDto toDto(Member member) {

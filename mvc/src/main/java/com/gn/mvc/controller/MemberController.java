@@ -19,12 +19,20 @@ public class MemberController {
 
 	private final MemberService service;
 	
-	@GetMapping("/member/create") //화면을 전환하는 메소드
+	// 로그인페이지로 이동하는 코드
+	@GetMapping("/login")
+	public String loginView() {
+		return "member/login";
+	}
+	
+	// 회원가입페이지로 이동하는 코드
+	@GetMapping("/signup") //화면을 전환하는 메소드
 	public String createMemberView() {
 		return "/member/create"; //templates>member>create.html로 이동
 	}
 	
-	@PostMapping("/member")
+	// 회원가입 기능구현하는 코드
+	@PostMapping("/signup")
 	@ResponseBody
 	public Map<String,String> createMemberApi(MemberDto dto){ //사용자가 입력하는 form태그에 있는 정보
 		Map<String,String> resultMap = new HashMap<String,String>();

@@ -55,8 +55,12 @@ layout:decorate="~{/include/layout}">
 				// 회원정보 등록
 				if(vali_check == true){
 					const payload = new FormData(form);
-					fetch("/member",{
+					fetch("/signup",{
 						method:'post',
+						headers:{
+							 'header': document.querySelector('meta[name="_csrf_header"]').content,
+				             'X-CSRF-Token': document.querySelector('meta[name="_csrf"]').content
+						},
 						body:payload
 					})
 					.then(response => response.json())
