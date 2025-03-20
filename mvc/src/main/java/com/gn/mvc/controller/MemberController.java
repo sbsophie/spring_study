@@ -4,8 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gn.mvc.dto.MemberDto;
@@ -19,9 +21,14 @@ public class MemberController {
 
 	private final MemberService service;
 	
-	// 로그인페이지로 이동하는 코드
+	// 로그인페이지로 이동하는 코드 (+MyLoginFailureHandler코드가 넘어오는 곳)
 	@GetMapping("/login")
-	public String loginView() {
+	public String loginView(
+			@RequestParam(value="error", required=false) String error,
+			@RequestParam(value="errorMsg", required=false) String errorMsg,
+			Model model) {
+		model.addAttribute("error",error);
+		model.addAttribute("errorMsg",errorMsg);
 		return "member/login";
 	}
 	
