@@ -24,10 +24,38 @@
 							<li>
 								<a th:href="@{/board}">게시판</a>
 							</li>
+							<li>
+								<a th:href="@{/member/{memberNo}/update(memberNo=${#authentication.principal.member.memberNo})}">회원수정</a>
+							</li>
+							<li>
+							    <a th:onclick="|javascript:memberDelete('${#authentication.principal.member.memberNo}')|">회원 탈퇴</a>							
+							</li>
 						</th:block>
 					</ul>
 				</div>
 			</div>
 		</nav>
+		<script>
+			//<회원 탈퇴> 버튼을 클릭하면 fetch(비동기 통신)을 활용하여 요청 전달
+			//url : /member/{id}, method: delete
+				const memberDelete = function(memberNo){
+				if(confirm("정말로 회원탈퇴를 하시겠습니까?")){
+					fetch('/member/'+memberNo,{
+						method:'delete',
+						headers: {
+				              'header': document.querySelector('meta[name="_csrf_header"]').content,
+				              'X-CSRF-Token': document.querySelector('meta[name="_csrf"]').content
+						}
+					})
+					.then(response => response.json())
+					.then(data => {
+						alert(data.res_msg);
+						if(data.res_code == 200){
+							location.href="/";
+						}
+					});
+				}
+			}
+		</script>
 	</th:block>
 </html>
