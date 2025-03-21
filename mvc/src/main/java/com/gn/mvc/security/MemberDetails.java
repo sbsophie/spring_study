@@ -25,7 +25,8 @@ public class MemberDetails implements UserDetails{
 	// 사용자의 권한을 설정해주기(여러개의 권한을 가질수있어서 리스트 형식으로)
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of(new SimpleGrantedAuthority("user"));
+//		return List.of(new SimpleGrantedAuthority("user"));
+		return List.of(new SimpleGrantedAuthority(member.getMemberRole()));		
 	}
 
 	// 사용자의 비밀번호를 반환하는 코드
