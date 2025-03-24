@@ -33,6 +33,12 @@ public class BoardService {
 	private final BoardRepository repository;
 	private final AttachRepository attachRepository;
 	private final AttachService attachService;
+	
+	//BoardService 클래스 생성 및 기능 추가(CRUD)
+//	public BoardDto createBoard(Board board) {
+//		Board saved = boardRepository.save(board);
+//		return new BoardDto().toDto(saved);
+//	}
 
 	// 삭제
 	public int deleteBoard(Long id) {
@@ -49,6 +55,18 @@ public class BoardService {
 		return result;
 	}
 
+	// 게시글 수정(CRUD)
+//	public Board updateBoard(BoardDto param) {
+//		Board result = null;
+//		// 1. id를 기준으로 타킷 조회
+//		Board target = boardRepository.findById(param.getBoard_no()).orElse(null);
+//		// 2. 타깃이 존재하는 경우 업데이트
+//		if(target != null) {
+//			result = boardRepository.save(param.toEntity());
+//		}
+//		return result;
+//	}
+	
 	// 하나의 게시글에 들어가서 수정
 	@Transactional(rollbackFor = Exception.class)
 	public Board updateBoard(BoardDto param,List<AttachDto> attachList) {
@@ -91,7 +109,7 @@ public class BoardService {
 		return repository.findById(id).orElse(null);
 	}
 
-	// 페이징
+	// 검색 , 페이징
 	public Page<Board> selectBoardAll(SearchDto searchDto, PageDto pageDto) {
 //		List<Board> list = new ArrayList<Board>();
 //		if(searchDto.getSearch_type() == 1) {

@@ -46,6 +46,24 @@ public class BoardController {
 		return "board/create";
 	}
 	
+	// BoardController에 요청 메소드를 생성(CRUD)
+//	@PostMapping("/board")
+//	@ResponseBody
+//	public Map<String,String> createArticleApi(BoardDto dto){
+//		Map<String,String> resultMap = new HashMap<String,String>();
+//		resultMap.put("res_code", "404");
+//		resultMap.put("res_msg", "게시글 등록중 오류가 발생했습니다.");
+//		
+//		System.out.println(dto);
+//		BoardDto saved = boardService.createBoard(dto);
+//		if(saved.getBoardNo() != null) {
+//			resultMap.put("res_code", "200");
+//			resultMap.put("res_msg", "게시글이 등록되었습니다.");
+//		}
+//		return resultMap;
+//	}
+	
+	
 	//게시글 등록시 동작하는 기능
 	@PostMapping("/board")
 	@ResponseBody
@@ -77,6 +95,13 @@ public class BoardController {
 //		logger.error("4 : "+result.toString());
 	}
 	
+	//검색,페이징
+//	@GetMapping("/board")
+//	public String selectBoardAll(Model model, SearchDto searchDto) {
+//		List<Board> resultList = boardService.selectBoardAll(searchDto);
+//		model.addAttribute("boardList", resultList);
+//		return "board/list";
+//	}
 	@GetMapping("/board")
 	public String selectBoardAll(Model model,SearchDto searchDto,
 			PageDto pageDto) {
@@ -130,13 +155,13 @@ public class BoardController {
 		Map<String,String> resultMap = new HashMap<String,String>();
 		resultMap.put("res_code", "500");
 		resultMap.put("res_msg", "게시글 수정중 오류가 발생하였습니다.");
+		param.setBoar_no(id);
 		
-		//logger.info("삭제 파일 정보"+param.getDelete_files());
-		
-		//1.BoardDto가 출력되는지 확인
-		logger.debug(param.toString());
-		//2.BoardService와 BoardRepository를 거쳐서 게시글 수정 -> 이부분에만 파일 삭제
-		List<AttachDto> attachDtoList = new ArrayList<AttachDto>();
+//		//logger.info("삭제 파일 정보"+param.getDelete_files());
+//		//1.BoardDto가 출력되는지 확인
+//		logger.debug(param.toString());
+//		//2.BoardService와 BoardRepository를 거쳐서 게시글 수정 -> 이부분에만 파일 삭제
+//		List<AttachDto> attachDtoList = new ArrayList<AttachDto>();
 		
 		Board saved = service.updateBoard(param, attachDtoList);
 		//3.수정 결과를 Entity가 null이 아니면 성공 그외에는 실패
@@ -145,10 +170,10 @@ public class BoardController {
 			resultMap.put("res_msg", "게시글이 수정되었습니다.");
 		}
 		
-		for(MultipartFile mf : param.getFiles()) {
-			AttachDto attachDto = attachService.uploadFile(mf);
-			if(attachDto != null) attachDtoList.add(attachDto);
-		}
+//		for(MultipartFile mf : param.getFiles()) {
+//			AttachDto attachDto = attachService.uploadFile(mf);
+//			if(attachDto != null) attachDtoList.add(attachDto);
+//		}
 		return resultMap;
 	}
 	
