@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+	<th:block>
+		<script th:src="@{/js/jquery-3.7.1.js}"></script>
+		<section>
+		<div id="section_wrap">
+			<div class="word">
+				<h1>할일 목록</h1>
+			</div><br>
+				<form action="/todoList" name="search_todoList_form" method="get">
+				<div class="search">
+					<label for="search_text">내용 : </label>
+					<input type="text" name="search_text" id="search_text">
+					<input type="submit" value="검색">		
+				</div>
+				</form>
+			<div class="todo_list">
+				<table border="1">
+					<thead>
+						<tr>
+				            <th>완료</th>
+				            <th>번호</th>
+				            <th>내용</th>
+				            <th>삭제</th>
+				        </tr>
+					</thead>
+					<tbody>
+						<tr th:if="${#lists.isEmpty(todoList)}">
+							<td colspan="4">할일이 없습니다.</td>
+						</tr>
+						<tr th:if="${!#lists.isEmpty(todoList)}"
+							th:each="todo,todoStatus : ${todoList}"
+							th:attr="data-list-no=${todo.todoNo}">
+							<td><input type="checkbox"></td>
+							<td th:text="${(pageDto.nowPage-1)*(pageDto.numPerPage)+todoStatus.count}">번호</td> 
+							<td th:text="${todo.todoContent}">내용</td>
+							<td>
+								<button type="button" th:onclick="|todoListDelete('${todo.todoNo}')|">삭제</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+<!-- 			<div class="center">
+				<div class="pagination">
+					<a th:if="${pageDto.prev}"
+						th:href="@{/todo(nowPage=${pageDto.pageBarStart-1},search_type=${searchDto.search_type},search_text=${searchDto.search_text},order_type=${searchDto.order_type})}">
+						&laquo;
+					</a>
+					<a th:each="num : ${#numbers.sequence(pageDto.pageBarStart,pageDto.pageBarEnd)}"
+						th:text="${num}" class="page-link"
+						th:classappend="${pageDto.nowPage == num} ? 'active' "
+						th:href="@{/todo(nowPage=${num},search_type=${searchDto.search_type},search_text=${searchDto.search_text},order_type=${searchDto.order_type})}">
+						번호
+					</a>
+					<a th:if="${pageDto.next}"
+						th:href="@{/todo(nowPage=${pageDto.pageBarEnd+1},search_type=${searchDto.search_type},search_text=${searchDto.search_text},order_type=${searchDto.order_type})}">
+						&raquo;
+					</a>
+				</div>
+			</div> -->
+			</div>
+		
+			<div class="word">
+				<h1>할 일 추가</h1>
+			</div>
+			<form action='/todoList' name="create_todoList_form" method="post">
+				<div class="insert">
+					<input type="hidden" name="todoFlag" value="N">
+					<input type="text" name="todoContent" placeholder="할일을 입력하세요.">
+					<input type="submit" value="추가하기">
+				</div>
+			</form>
+		</div>
+		</section>
+		<script>
+			const form = document.create_todoList_form;
+			form.addEventListener('submit',(e)=>{
+				e.preventDefault();
+				
+				let vali_check = false;
+				let vali_text = "";
+				
+				if(!form.todoContent.value){
+					vali_text += "할일을 입력하세요";
+					form.todoContent.focus();
+				}else {
+					vali_check = true;
+				}
+				
+				if(vali_check == false){
+					alert(vali_text);
+				}else{
+					const payload = new FormData(form);
+					fetch("/todoList",{
+						method:'post',
+						body:payload
+					})
+					.then(response => response.json())
+					.then(data => {
+						alert(data.res_msg);
+					})
+					.catch(error => {
+						console.log(error);
+					})
+				}
+			});
+			const todoListDelete = function(todoNo){
+				console.log(todoNo);
+				if(confirm("할일을 삭제하시겠습니까?")){
+					fetch('/todoList/'+todoNo
+							,{method:'delete'})
+					.then(response => response.json())
+					.then(data => {
+						alert(data.res_msg);
+						if(data.res_code == 200){
+							location.reload();
+						}
+					});
+				}
+			}
+			
+		</script>
+	</th:block>
+</html>

@@ -18,7 +18,6 @@ import com.gn.mvc.entity.Attach;
 import com.gn.mvc.entity.Board;
 import com.gn.mvc.repository.AttachRepository;
 import com.gn.mvc.repository.BoardRepository;
-import com.gn.mvc.repository.MemberRepository;
 import com.gn.mvc.specification.BoardSpecification;
 
 import lombok.RequiredArgsConstructor;
