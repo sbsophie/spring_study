@@ -14,7 +14,7 @@ import lombok.ToString;
 @ToString
 @Builder
 public class SearchDto {
-	private int search_type;
+
 	private String search_text;
-	private int order_type;
+
 }

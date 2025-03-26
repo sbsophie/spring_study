@@ -155,13 +155,13 @@ public class BoardController {
 		Map<String,String> resultMap = new HashMap<String,String>();
 		resultMap.put("res_code", "500");
 		resultMap.put("res_msg", "게시글 수정중 오류가 발생하였습니다.");
-		param.setBoar_no(id);
+//		param.setBoar_no(id);
 		
 //		//logger.info("삭제 파일 정보"+param.getDelete_files());
 //		//1.BoardDto가 출력되는지 확인
-//		logger.debug(param.toString());
+		logger.debug(param.toString());
 //		//2.BoardService와 BoardRepository를 거쳐서 게시글 수정 -> 이부분에만 파일 삭제
-//		List<AttachDto> attachDtoList = new ArrayList<AttachDto>();
+		List<AttachDto> attachDtoList = new ArrayList<AttachDto>();
 		
 		Board saved = service.updateBoard(param, attachDtoList);
 		//3.수정 결과를 Entity가 null이 아니면 성공 그외에는 실패

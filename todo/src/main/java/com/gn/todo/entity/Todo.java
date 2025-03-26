@@ -1,7 +1,5 @@
 package com.gn.todo.entity;
 
-import java.time.LocalDateTime;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,20 +12,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="todo_list")
-@Builder
+@Table(name="todo")
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TodoList {
+public class Todo {
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long todoNo;
+	@Column(name="no")
+	private Long no;
 	
-	@Column(name="todo_content")
-	private String todoContent;
+	@Column(name="content")
+	private String content;
 	
-	@Column(name="todo_flag")
-	private String todoFlag;
+	@Column(name="flag")
+	private String flag;
 	
 }

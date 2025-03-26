@@ -6,10 +6,11 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-import com.gn.todo.entity.TodoList;
+import com.gn.todo.entity.Todo;
 
-public interface TodoListRepository extends JpaRepository<TodoList, Long>, JpaSpecificationExecutor<TodoList>{
-	
-	Page<TodoList> findAll(Specification<TodoList> spec,Pageable pageable);
+public interface TodoRepository extends JpaRepository<Todo, Long>
+										,JpaSpecificationExecutor<Todo>{
+
+	Page<Todo> findAll(Specification<Todo> spec,Pageable pageable);
 
 }
