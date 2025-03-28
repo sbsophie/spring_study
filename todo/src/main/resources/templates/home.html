@@ -2,9 +2,127 @@
 <html xmlns:th="http://www.thymeleaf.org" >
 <head>
 <meta charset="UTF-8">
-<title>Home 화면</title>
+<title>할 일 목록</title>
+<style>
+h1 {
+		text-align: center;
+		margin-top: 30px;
+		color: #2c3e50;
+	}
+
+	.search, .plus_todo_form, .center {
+		width: 60%;
+		margin: 20px auto;
+		padding: 20px;
+		background: #ffffff;
+		border-radius: 12px;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	}
+
+	.todo_list {
+		width: 80%;
+		margin: auto;
+	}
+
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		background-color: #ffffffd0;
+		border-radius: 12px;
+		overflow: hidden;
+	}
+
+	table th, table td {
+		padding: 12px;
+		text-align: center;
+		border: 1px solid #e0e0e0;
+	}
+
+	table thead {
+		background-color: #cdd9ed;
+		color: #2c3e50;
+	}
+
+	tbody tr:nth-child(even) {
+		background-color: #f0f4fa; /* 짝수 줄 배경 */
+	}
+
+	input[type="text"] {
+		width: 70%;
+		padding: 10px;
+		border: 1px solid #ccc;
+		border-radius: 8px;
+		margin-right: 10px;
+		background-color: #f8faff; /* 텍스트 입력창 파스텔톤 */
+		color: #2c3e50;
+	}
+
+	input[type="submit"], button {
+		padding: 10px 20px;
+		background: #a8c0e0; /* 파스텔 블루 버튼 */
+		border: none;
+		border-radius: 8px;
+		color: white;
+		cursor: pointer;
+		transition: background 0.3s ease;
+	}
+
+	input[type="submit"]:hover, button:hover {
+		background: #8aaad0;
+	}
+
+	.pagination {
+		display: flex;
+		justify-content: center;
+		gap: 8px;
+		margin-top: 20px;
+	}
+
+	.pagination a {
+		padding: 8px 14px;
+		text-decoration: none;
+		border: 1px solid #ccc;
+		border-radius: 6px;
+		color: #333;
+		background: white;
+		transition: background 0.3s ease;
+	}
+
+	.pagination a:hover {
+		background: #cdd9ed;
+		color: white;
+	}
+	
+</style>
 </head>
 <body>
+	<h1>파일 목록</h1>
+	<form name="create_file_form">
+		<input type="file" name="files" multiple>
+		<input type="submit" value="업로드">
+	</form>
+	<script>
+		const attachCreateFrm = document.create_file_form;
+			attachCreateFrm.addEventListener("submit",function(e){
+			e.preventDefault();
+			if(attachCreateFrm.files.files.length === 0){
+				alert("파일을 넣어주세요");
+			}else{
+				const payload = new FormData(attachCreateFrm);
+				fetch("/attach/create",{
+					method:"post",
+					body : payload
+				})
+				.then(response => response.json())
+				.then(data => {
+					alert(data.res_msg);
+					if(data.res_code == '200'){
+						location.href="/";
+					}
+				});
+			}
+		});
+	</script>
 	<h1>할일 목록</h1>
 	<form action="/" method="get">
 		<label for="search_text">내용 : </label>
