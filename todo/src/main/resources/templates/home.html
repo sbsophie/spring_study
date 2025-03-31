@@ -109,7 +109,7 @@ h1 {
 				alert("파일을 넣어주세요");
 			}else{
 				const payload = new FormData(attachCreateFrm);
-				fetch("/attach/create",{
+				fetch("/s3/upload",{
 					method:"post",
 					body : payload
 				})
