@@ -1,6 +1,7 @@
 package com.gn.todo.service;
 
 import java.io.File;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -8,10 +9,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.gn.todo.dto.AttachDto;
+import com.gn.todo.entity.Attach;
+import com.gn.todo.repository.AttachRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class AttachService {
 
+	private final AttachRepository attachRepository;
+	
 	@Value("${ffupload.location}")
 	private String fileDir;
 	
@@ -67,10 +75,19 @@ public class AttachService {
 	}
 
 	// 2. 파일 메타 데이터 insert
-	public void createAttach(AttachDto dto) {
-		
+	public Attach createAttach(AttachDto dto) {
+		Attach entity = dto.toEntity();
+		Attach saved = attachRepository.save(entity);
+		return saved;
+	}
+
+	public Attach selectAttachOne(Long id) {
+		return attachRepository.findById(id).orElse(null);
 	}
 	
-	
+	public List<Attach> selectAttachList() {
+		List<Attach> resultList = attachRepository.findAll();
+		return resultList;
+	}
 	
 }
