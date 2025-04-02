@@ -114,7 +114,7 @@ h1 {
 					<tr th:each="attach, attachStatus : ${attachList}">
 						<td th:text="${attachStatus.count}">번호</td>
 						<td>
-							<a th:onclick="|location.href='@{/s3/download/{id}(id=${attach.attachNo})}'|"
+							<a th:onclick="|location.href='@{/download/{id}(id=${attach.attachNo})}'|"
 								th:text="${attach.oriName}">
 								파일명
 							</a>
@@ -130,7 +130,7 @@ h1 {
 				alert("파일을 넣어주세요");
 			}else{
 				const payload = new FormData(attachCreateFrm);
-				fetch("/s3/upload",{
+				fetch("/attach/create",{
 					method:"post",
 					body : payload
 				})
