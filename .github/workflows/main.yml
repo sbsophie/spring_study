@@ -39,7 +39,8 @@ jobs:
             sudo docker rmi my-app || true
 
             # 6. jar파일 복제해서 이미지 빌드 후 컨테이너 run 하기
-            
+            sudo docker build -t my-app .
+            sudo docker run -d --name my-app -p 8080:8080 my-app
 
 
 
